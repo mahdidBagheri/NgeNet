@@ -204,6 +204,15 @@ def main():
                 # This line of code reduces the training speed. 
                 # If GPU memory allows, it is recommended not to add this line of code or add this line after each epoch
                 torch.cuda.empty_cache()
+                
+                for k, v in inputs.items():
+                   if isinstance(v, list):
+                       for i in range(len(v)):
+                           if (torch.cuda.is_available()):
+                               inputs[k][i] = inputs[k][i].to('cpu')
+                   else:
+                       if (torch.cuda.is_available()):
+                           inputs[k] = inputs[k].to('cpu')
 
         if np.mean(total_circle_loss) < best_circle_loss:
             best_circle_loss = np.mean(total_circle_loss)
